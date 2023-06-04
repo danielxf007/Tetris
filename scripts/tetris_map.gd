@@ -2,9 +2,9 @@ extends Node
 
 class_name TetrisMap
 
-const MAP_DIMS: Vector2i = Vector2i(16, 24)
-const OFFSET_ROW: int = 4
+const MAP_DIMS: Vector2i = Vector2i(10, 24)
 const CELL_DIMS: Vector2 = Vector2i(32, 32)
+const OFFSET_ROW: int = 4
 var textures: Dictionary = {
 	"blue": load("res://assets/blue_block.jpg"),
 	"green": load("res://assets/green_block.jpg"),
@@ -13,12 +13,22 @@ var textures: Dictionary = {
 	"yellow": load("res://assets/yellow_block.jpg")}
 var map: Array
 var blocks: Array
+var ghost_blocks: Array
 var blocks_node: Node
+var n_rows_cleared: int
 
 func _ready():
 	map = create_empty_map(MAP_DIMS)
 	blocks_node = $Blocks
 	blocks = Array()
+	ghost_blocks = Array()
+	n_rows_cleared = 0
+
+func reset() -> void:
+	clear_map(map, MAP_DIMS)
+	clear_blocks_arr(blocks)
+	clear_blocks_arr(ghost_blocks)
+	n_rows_cleared = 0
 
 # Util
 func create_empty_row(size: int) -> Array:
@@ -38,7 +48,14 @@ func create_empty_map(dims: Vector2i) -> Array:
 func clear_map(_map: Array, dims: Vector2i) -> void:
 	for i in range(dims.y):
 		for j in range(dims.x):
+			if _map[i][j] != null:
+				_map[i][j].destroy()
 			_map[i][j] = null
+
+func clear_blocks_arr(arr: Array) -> void:
+	for block in arr:
+		block.destroy()
+	arr.clear()
 
 func map_coord_to_global_coord(coord: Vector2i) -> Vector2:
 	var x: float = (CELL_DIMS.x/2)+(coord.x*CELL_DIMS.x)
@@ -96,6 +113,12 @@ func check_block_collision(tetris_piece: TetrisPiece) -> bool:
 			return true
 	return false
 
+func has_blocks_in_hidden_zone() -> bool:
+	for i in range(OFFSET_ROW):
+		if map[i].any(func (b): return b != null):
+			return true
+	return false
+
 # Update
 func update_moving_blocks_pos(tetris_piece: TetrisPiece) -> void:
 	var coords: Array = tetris_piece._block_coords
@@ -103,6 +126,13 @@ func update_moving_blocks_pos(tetris_piece: TetrisPiece) -> void:
 	for index in range(tetris_piece._n_blocks):
 		pos = map_coord_to_global_coord(coords[index])
 		blocks[index].global_position = pos
+
+func update_ghost_blocks_pos(ghost_piece: TetrisPiece) -> void:
+	var coords: Array = ghost_piece._block_coords
+	var pos: Vector2
+	for index in range(ghost_piece._n_blocks):
+		pos = map_coord_to_global_coord(coords[index])
+		ghost_blocks[index].global_position = pos
 
 func update_static_blocks_pos() -> void:
 	var m_cols: int = MAP_DIMS.x
@@ -122,15 +152,23 @@ func fill_blocks(tetris_piece: TetrisPiece) -> void:
 	
 func update_map(tetris_piece: TetrisPiece) -> void:
 	var clear_indexes: Vector2i
+	clear_blocks_arr(ghost_blocks)
 	fill_blocks(tetris_piece)
 	clear_indexes = get_complete_row_indexes()
 	clear_complete_rows(clear_indexes)
 	shift_map_down(clear_indexes)
 	update_static_blocks_pos()
+	n_rows_cleared = clear_indexes.x-clear_indexes.y
 
 # Collision Processing
 func create_block(color: String) -> Block:
 	var block: Block = Block.new()
+	block.scale = Vector2(0.5, 0.5)
+	block.texture = textures[color]
+	return block
+
+func create_ghost_block(color: String) -> GhostBlock:
+	var block: GhostBlock = GhostBlock.new()
 	block.scale = Vector2(0.5, 0.5)
 	block.texture = textures[color]
 	return block
@@ -146,3 +184,19 @@ func create_blocks(tetris_piece: TetrisPiece, color: String) -> void:
 		blocks_node.add_child(block)
 		block.global_position = map_coord_to_global_coord(coord)
 		block.show()
+
+func create_ghost_blocks(tetris_piece: TetrisPiece, color: String) -> void:
+	var coords: Array = tetris_piece._block_coords
+	var block: GhostBlock
+	ghost_blocks.clear()
+	for coord in coords:
+		block = create_ghost_block(color)
+		ghost_blocks.append(block)
+		block.hide()
+		blocks_node.add_child(block)
+		block.global_position = map_coord_to_global_coord(coord)
+		block.show()
+
+func create_blocks_from(tetris_piece: TetrisPiece, color: String) -> void:
+	create_blocks(tetris_piece, color)
+	create_ghost_blocks(tetris_piece, color)
