@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bekmxtxvoepgq"]
+
+[ext_resource type="Script" path="res://scripts/tetris_map.gd" id="1_jql5y"]
+
+[node name="TetrisMap" type="Node"]
+script = ExtResource("1_jql5y")
+
+[node name="Blocks" type="Node" parent="."]

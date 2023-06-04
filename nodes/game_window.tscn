@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3hw2saxamngd"]
+
+[ext_resource type="Texture2D" uid="uid://cox1xgw2yltij" path="res://icon.svg" id="1_khlct"]
+
+[node name="GameWindow" type="Window"]
+size = Vector2i(520, 720)
+mode = 3
+unresizable = true
+borderless = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_khlct")
