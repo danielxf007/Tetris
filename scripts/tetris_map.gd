@@ -2,9 +2,9 @@ extends Node
 
 class_name TetrisMap
 
-const MAP_DIMS: Vector2i = Vector2i(10, 24)
+const MAP_DIMS: Vector2i = Vector2i(10, 25)
 const CELL_DIMS: Vector2 = Vector2i(32, 32)
-const OFFSET_ROW: int = 4
+const OFFSET_ROW: int = 5
 var textures: Dictionary = {
 	"blue": load("res://assets/blue_block.jpg"),
 	"green": load("res://assets/green_block.jpg"),
@@ -130,9 +130,10 @@ func update_moving_blocks_pos(tetris_piece: TetrisPiece) -> void:
 func update_ghost_blocks_pos(ghost_piece: TetrisPiece) -> void:
 	var coords: Array = ghost_piece._block_coords
 	var pos: Vector2
-	for index in range(ghost_piece._n_blocks):
-		pos = map_coord_to_global_coord(coords[index])
-		ghost_blocks[index].global_position = pos
+	if len(ghost_blocks):
+		for index in range(ghost_piece._n_blocks):
+			pos = map_coord_to_global_coord(coords[index])
+			ghost_blocks[index].global_position = pos
 
 func update_static_blocks_pos() -> void:
 	var m_cols: int = MAP_DIMS.x
