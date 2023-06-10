@@ -1,7 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0g72j5j12sga"]
+[gd_scene load_steps=3 format=3 uid="uid://d0g72j5j12sga"]
 
 [ext_resource type="PackedScene" uid="uid://cdggt1swbgxhj" path="res://nodes/game.tscn" id="1_4b0qw"]
+[ext_resource type="PackedScene" uid="uid://bakwxgk3yoe1m" path="res://nodes/interface.tscn" id="1_6j8nw"]
 
 [node name="Main" type="Node"]
 
 [node name="Game" parent="." instance=ExtResource("1_4b0qw")]
+
+[node name="Interface" parent="." node_paths=PackedStringArray("GAME_NODE") instance=ExtResource("1_6j8nw")]
+offset_left = 320.0
+offset_right = 0.0
+GAME_NODE = NodePath("../Game")
+
+[connection signal="got_next_piece" from="Game" to="Interface" method="_on_game_got_next_piece"]

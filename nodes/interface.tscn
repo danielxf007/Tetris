@@ -1,0 +1,87 @@
+[gd_scene load_steps=4 format=3 uid="uid://bakwxgk3yoe1m"]
+
+[ext_resource type="Script" path="res://scripts/interface.gd" id="1_pa6ag"]
+[ext_resource type="Texture2D" uid="uid://csxgipyr7ydv5" path="res://assets/bg.jpg" id="1_su0gd"]
+[ext_resource type="Texture2D" uid="uid://iqp6cfnsargh" path="res://assets/next_piece_frame.png" id="3_rkxm3"]
+
+[node name="Interface" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -320.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pa6ag")
+
+[node name="Bg" type="Sprite2D" parent="."]
+position = Vector2(128, 320)
+scale = Vector2(0.8, 1)
+texture = ExtResource("1_su0gd")
+
+[node name="NextPieceFrame" type="Sprite2D" parent="."]
+position = Vector2(128, 320)
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("3_rkxm3")
+
+[node name="ScoreL" type="Label" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_right = 192.0
+offset_bottom = 64.0
+text = "Score"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScoreNumbersL" type="Label" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 192.0
+offset_bottom = 128.0
+text = "0000000000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NextPieceL" type="Label" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 192.0
+offset_right = 192.0
+offset_bottom = 256.0
+text = "Next Piece"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Play" type="Button" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 448.0
+offset_right = 192.0
+offset_bottom = 480.0
+focus_mode = 0
+text = "Play"
+
+[node name="Pause" type="Button" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 512.0
+offset_right = 192.0
+offset_bottom = 544.0
+focus_mode = 0
+text = "Pause"
+
+[node name="Reset" type="Button" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 576.0
+offset_right = 192.0
+offset_bottom = 608.0
+focus_mode = 0
+text = "Reset"
+
+[node name="Blocks" type="Node" parent="."]
+
+[connection signal="button_down" from="Play" to="." method="_on_play_button_down"]
+[connection signal="button_down" from="Pause" to="." method="_on_pause_button_down"]
+[connection signal="button_down" from="Reset" to="." method="_on_reset_button_down"]

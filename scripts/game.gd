@@ -1,5 +1,7 @@
 extends Node
+signal got_next_piece(piece, color)
 
+enum {STOPPED, PLAYING, PAUSED, RESETTED}
 const SIDE_MOV_UNITS: int = 1
 const DOWN_MOV_UNITS: int = 1
 const CLOCK_INIT_TIME: float = 1.0
@@ -12,9 +14,11 @@ var clock: Timer
 var piece_collided: bool
 var player_controls_down_mov: bool
 var tetris_piece: TetrisPiece
+var next_piece: TetrisPiece
 var ghost_piece: TetrisPiece
 var lvl_handler: LevelHandler
 var piece_gen: PieceGenerator
+var game_state: int
 
 # Game control
 func _ready():
@@ -25,19 +29,28 @@ func _ready():
 	lvl_handler = LevelHandler.new()
 	piece_gen = PieceGenerator.new()
 	set_process_input(false)
-	start()
+	game_state = STOPPED
 
 func generate_piece() -> void:
-	var color: String = piece_gen.next_piece_data['color']
-	tetris_piece = piece_gen.generate_piece()
-	ghost_piece.init(tetris_piece._n_blocks, tetris_piece._type,
-	tetris_piece._block_coords.duplicate(), tetris_piece._rotation)
-	tetris_map.create_blocks_from(tetris_piece, color)
+	var color: String
+	if next_piece != null:
+		color = piece_gen.next_piece_data['color']
+		tetris_piece = next_piece
+		next_piece = piece_gen.generate_piece()
+		ghost_piece.init(tetris_piece._n_blocks, tetris_piece._type,
+		tetris_piece._block_coords.duplicate(), tetris_piece._rotation)
+		tetris_map.create_blocks_from(tetris_piece, color)
+		color = piece_gen.next_piece_data['color']
+		emit_signal("got_next_piece", next_piece, color)
+	else:
+		next_piece = piece_gen.generate_piece()
+		generate_piece()
 
 func start() -> void:
 	piece_collided = false
 	player_controls_down_mov = false
 	piece_gen.init()
+	next_piece = null
 	generate_piece()
 	lvl_handler.init()
 	update_ghost_piece()
@@ -46,17 +59,28 @@ func start() -> void:
 	clock.start()
 
 func play() -> void:
-	"""The game continues"""
-	pass
+	match game_state:
+		STOPPED:
+			start()
+			game_state = PLAYING
+		PAUSED:
+			set_process_input(false)
+			clock.paused = false
+			clock.start()
+			game_state = PLAYING
 
 func pause() -> void:
-	"""Stops the game, all input is deactivate except the one for play and game
-	clock is stopped"""
-	pass
+	match game_state:
+		PLAYING:
+			set_process_input(false)
+			clock.paused = true
+			game_state = PAUSED
 
 func reset() -> void:
-	"""The game variables go back to their initial state"""
-	pass
+	game_state = RESETTED
+	tetris_map.reset()
+	start()
+	game_state = PLAYING
 
 func game_over() -> void:
 	"""Finish the game"""
