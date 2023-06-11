@@ -2,9 +2,9 @@ extends Node
 
 class_name TetrisMap
 
-const MAP_DIMS: Vector2i = Vector2i(10, 25)
+const MAP_DIMS: Vector2i = Vector2i(10, 24)
 const CELL_DIMS: Vector2 = Vector2i(32, 32)
-const OFFSET_ROW: int = 5
+const OFFSET_ROW: int = 4
 var textures: Dictionary = {
 	"blue": load("res://assets/blue_block.jpg"),
 	"green": load("res://assets/green_block.jpg"),

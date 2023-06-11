@@ -1,11 +1,13 @@
 extends Control
 
-const N_BLOCKS:Array = [4, 4, 4, 4, 4, 1]
+const N_BLOCKS:Array = [4, 4, 4, 4, 4, 4, 4, 1]
 const CELL_DIMS: Vector2i = Vector2i(32, 32)
 const INIT_POINTS: Array = [
 	[Vector2i(448,368), Vector2i(400, 320)],
 	[Vector2i(416,336), Vector2i(464,352), Vector2i(480,304), Vector2i(432,288)],
+	[Vector2i(480,336), Vector2i(464,296), Vector2i(416,304), Vector2i(432,352)],
 	[Vector2i(416,336), Vector2i(464,352)],
+	[Vector2i(480,336), Vector2i(464,288)],
 	[Vector2i(448,336), Vector2i(464,320), Vector2i(448,304), Vector2i(432,320)],
 	[Vector2i(432,336)],
 	[Vector2i(448,320)]
@@ -71,3 +73,6 @@ func _on_reset_button_down():
 
 func _on_game_got_next_piece(piece, color):
 	update_next_piece(piece, color)
+
+func _on_game_score_updated(score):
+	update_score_number(score)

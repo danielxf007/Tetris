@@ -13,3 +13,4 @@ offset_right = 0.0
 GAME_NODE = NodePath("../Game")
 
 [connection signal="got_next_piece" from="Game" to="Interface" method="_on_game_got_next_piece"]
+[connection signal="score_updated" from="Game" to="Interface" method="_on_game_score_updated"]

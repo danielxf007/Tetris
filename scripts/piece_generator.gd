@@ -3,13 +3,16 @@ extends Node
 class_name PieceGenerator
 
 const PIECE_TYPES: int = 6
-const N_BLOCKS:Array = [4, 4, 4, 4, 4, 1]
+const N_BLOCKS:Array = [4, 4, 4, 4, 4, 4, 4, 1]
 const COLORS: Array = ["blue", "green", "purple", "red", "yellow"]
-const INIT_COORD: Vector2i = Vector2i(4, 3)
+const INIT_COORDS: Array = [Vector2i(5, 3), Vector2i(4, 3), Vector2i(6, 3),
+Vector2i(4, 3), Vector2i(6, 3), Vector2i(5, 3), Vector2i(4, 3), Vector2i(5, 3)]
 const PIECE_SHAPES: Array = [
 	[Vector2i(), Vector2i(0, -1), Vector2i(0, -2), Vector2i(0, -3)],
 	[Vector2i(), Vector2i(0, -1), Vector2i(1, -1), Vector2i(2, -1)],
-	[Vector2i(), Vector2i(1, 0), Vector2i(1, -1), Vector2i(2, -1)],
+	[Vector2i(), Vector2i(0, -1), Vector2i(-1, -1), Vector2i(-2, -1)],
+	[Vector2i(), Vector2i(1, 0), Vector2i(-1, -1), Vector2i(2, -1)],
+	[Vector2i(), Vector2i(-1, 0), Vector2i(-1, -1), Vector2i(-2, -1)],
 	[Vector2i(), Vector2i(0, -1), Vector2i(-1, -1), Vector2i(1, -1)],
 	[Vector2i(), Vector2i(1, 0), Vector2i(1, -1), Vector2i(0, -1)],
 	[Vector2i()]
@@ -31,8 +34,9 @@ func generate_piece_data() -> Dictionary:
 
 func generate_piece() -> TetrisPiece:
 	current_piece_data = next_piece_data
-	var type: int = next_piece_data["type"]
-	var coords: Array = PIECE_SHAPES[type].map(func (v): return INIT_COORD+v)
+	var type: int = 2#var type: int = next_piece_data["type"]
+	var coords: Array = PIECE_SHAPES[type].map(
+		func (v): return INIT_COORDS[type]+v)
 	var r_flag: bool = next_piece_data["rotated"]
 	var tetris_piece: TetrisPiece = TetrisPiece.new()
 	tetris_piece.init(N_BLOCKS[type], type, coords, r_flag)

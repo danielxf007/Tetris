@@ -1,5 +1,6 @@
 extends Node
 signal got_next_piece(piece, color)
+signal score_updated(score)
 
 enum {STOPPED, PLAYING, PAUSED, RESETTED}
 const SIDE_MOV_UNITS: int = 1
@@ -18,6 +19,7 @@ var next_piece: TetrisPiece
 var ghost_piece: TetrisPiece
 var lvl_handler: LevelHandler
 var piece_gen: PieceGenerator
+var score_handler: ScoreHandler
 var game_state: int
 
 # Game control
@@ -28,6 +30,7 @@ func _ready():
 	ghost_piece = TetrisPiece.new()
 	lvl_handler = LevelHandler.new()
 	piece_gen = PieceGenerator.new()
+	score_handler = ScoreHandler.new()
 	set_process_input(false)
 	game_state = STOPPED
 
@@ -50,6 +53,8 @@ func start() -> void:
 	piece_collided = false
 	player_controls_down_mov = false
 	piece_gen.init()
+	score_handler.init()
+	emit_signal("score_updated", score_handler.score)
 	next_piece = null
 	generate_piece()
 	lvl_handler.init()
@@ -160,7 +165,10 @@ func process_piece_collided() -> void:
 		generate_piece()
 		update_ghost_piece()
 		piece_collided = false
+		score_handler.update_score(tetris_map.n_rows_cleared)
+		emit_signal("score_updated", score_handler.score)
 		if lvl_handler.get_to_next_lvl(tetris_map.n_rows_cleared):
 			clock.wait_time-=CLOCK_DEC_TIME
 			clock.wait_time = clampf(clock.wait_time, CLOCK_MIN_TIME, 1.0)
+			score_handler.update_points_per_row()
 		clock.start()
