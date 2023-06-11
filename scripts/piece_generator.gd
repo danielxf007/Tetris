@@ -2,7 +2,7 @@ extends Node
 
 class_name PieceGenerator
 
-const PIECE_TYPES: int = 6
+const PIECE_TYPES: int = 8
 const N_BLOCKS:Array = [4, 4, 4, 4, 4, 4, 4, 1]
 const COLORS: Array = ["blue", "green", "purple", "red", "yellow"]
 const INIT_COORDS: Array = [
