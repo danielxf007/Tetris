@@ -1,3 +1,4 @@
 # Tetris
 Implementation of the game Tetris using Godot
-<img src="game_images/game.jpg" width="128"/>
+
+![Alt text](https://github.com/danielxf007/Tetris/blob/main/game_images/game.JPG)
