@@ -3,14 +3,14 @@ extends Control
 const N_BLOCKS:Array = [4, 4, 4, 4, 4, 4, 4, 1]
 const CELL_DIMS: Vector2i = Vector2i(32, 32)
 const INIT_POINTS: Array = [
-	[Vector2i(448,368), Vector2i(400, 320)],
-	[Vector2i(416,336), Vector2i(464,352), Vector2i(480,304), Vector2i(432,288)],
-	[Vector2i(480,336), Vector2i(464,296), Vector2i(416,304), Vector2i(432,352)],
-	[Vector2i(416,336), Vector2i(464,352)],
-	[Vector2i(480,336), Vector2i(464,288)],
-	[Vector2i(448,336), Vector2i(464,320), Vector2i(448,304), Vector2i(432,320)],
-	[Vector2i(432,336)],
-	[Vector2i(448,320)]
+	Vector2i(400,256), # Bar
+	Vector2i(416,240), # L
+	Vector2i(480,240), # L Flip,
+	Vector2i(432,240), # Square
+	Vector2i(480,240), # Z
+	Vector2i(416,240), # Z flip
+	Vector2i(448,272), # Triangle
+	Vector2i(448,256) # Block
 ]
 @export var GAME_NODE: Node
 var blocks: Array
@@ -50,12 +50,11 @@ func show_interface_blocks() -> void:
 
 func update_next_piece(piece: TetrisPiece, color: String) -> void:
 	hide_interface_blocks()
-	interface_blocks = blocks[piece._type]
 	var type: int = piece._type
-	var rot: int = piece._rotation
+	interface_blocks = blocks[type]
 	var vectors: Array = piece._block_coords.map(
 		func (coord): return coord-piece._block_coords[0])
-	var init_point: Vector2i = INIT_POINTS[type][rot]
+	var init_point: Vector2i = INIT_POINTS[type]
 	for i in range(len(interface_blocks)):
 		interface_blocks[i].texture = textures[color]
 		interface_blocks[i].global_position = init_point+(vectors[i]*CELL_DIMS)

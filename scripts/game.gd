@@ -41,7 +41,7 @@ func generate_piece() -> void:
 		tetris_piece = next_piece
 		next_piece = piece_gen.generate_piece()
 		ghost_piece.init(tetris_piece._n_blocks, tetris_piece._type,
-		tetris_piece._block_coords.duplicate(), tetris_piece._rotation)
+		tetris_piece._block_coords.duplicate())
 		tetris_map.create_blocks_from(tetris_piece, color)
 		color = piece_gen.next_piece_data['color']
 		emit_signal("got_next_piece", next_piece, color)
@@ -99,7 +99,7 @@ func update_ghost_piece() -> void:
 	while true:
 		ghost_piece.move_vertical(DOWN_MOV_UNITS)
 		if tetris_map.check_block_collision(ghost_piece):
-			ghost_piece.move_vertical(-DOWN_MOV_UNITS)
+			ghost_piece.revert()
 			tetris_map.update_ghost_blocks_pos(ghost_piece)
 			break
 
@@ -111,7 +111,7 @@ func process_side_movement(event) -> void:
 		units+=SIDE_MOV_UNITS
 	tetris_piece.move_horizontal(units)
 	if tetris_map.check_block_collision(tetris_piece):
-		tetris_piece.move_horizontal(-units)
+		tetris_piece.revert()
 	else:
 		tetris_map.update_moving_blocks_pos(tetris_piece)
 
@@ -122,7 +122,7 @@ func process_down_movement(event) -> void:
 			tetris_piece.move_vertical(DOWN_MOV_UNITS)
 			if tetris_map.check_block_collision(tetris_piece):
 				piece_collided = true
-				tetris_piece.move_vertical(-DOWN_MOV_UNITS)
+				tetris_piece.revert()
 				tetris_map.update_moving_blocks_pos(tetris_piece)
 				process_piece_collided()
 				break
@@ -132,7 +132,7 @@ func process_rotation(event) -> void:
 	if event.is_action_pressed("ui_accept"):
 		tetris_piece.rotate()
 		if tetris_map.check_block_collision(tetris_piece):
-			tetris_piece.rotate()
+			tetris_piece.revert()
 		else:
 			tetris_map.update_moving_blocks_pos(tetris_piece)
 

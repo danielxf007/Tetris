@@ -20,7 +20,7 @@ scale = Vector2(0.8, 1)
 texture = ExtResource("1_su0gd")
 
 [node name="NextPieceFrame" type="Sprite2D" parent="."]
-position = Vector2(128, 320)
+position = Vector2(128, 256)
 scale = Vector2(1.25, 1.25)
 texture = ExtResource("3_rkxm3")
 
@@ -36,9 +36,9 @@ vertical_alignment = 1
 [node name="ScoreNumbersL" type="Label" parent="."]
 layout_mode = 0
 offset_left = 64.0
-offset_top = 64.0
+offset_top = 40.0
 offset_right = 192.0
-offset_bottom = 128.0
+offset_bottom = 104.0
 text = "0000000000"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -46,9 +46,9 @@ vertical_alignment = 1
 [node name="NextPieceL" type="Label" parent="."]
 layout_mode = 0
 offset_left = 64.0
-offset_top = 192.0
+offset_top = 96.0
 offset_right = 192.0
-offset_bottom = 256.0
+offset_bottom = 160.0
 text = "Next Piece"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -56,27 +56,27 @@ vertical_alignment = 1
 [node name="Play" type="Button" parent="."]
 layout_mode = 0
 offset_left = 64.0
-offset_top = 448.0
+offset_top = 416.0
 offset_right = 192.0
-offset_bottom = 480.0
+offset_bottom = 448.0
 focus_mode = 0
 text = "Play"
 
 [node name="Pause" type="Button" parent="."]
 layout_mode = 0
 offset_left = 64.0
-offset_top = 512.0
+offset_top = 480.0
 offset_right = 192.0
-offset_bottom = 544.0
+offset_bottom = 512.0
 focus_mode = 0
 text = "Pause"
 
 [node name="Reset" type="Button" parent="."]
 layout_mode = 0
 offset_left = 64.0
-offset_top = 576.0
+offset_top = 544.0
 offset_right = 192.0
-offset_bottom = 608.0
+offset_bottom = 576.0
 focus_mode = 0
 text = "Reset"
 
